@@ -15,7 +15,7 @@ public class PaisCliente {
     private RestTemplate restTemplate;
 
     public CapitalDto obtenerCapital(String nombre) {
-        String url = "http://dockerapidivisionpolitica:8080/paises/capital/" + nombre;
+        String url = "http://dockerapidivisionpolitica:3030/paises/capital/" + nombre;
 
         ResponseEntity<CapitalDto> response = restTemplate.exchange(url, HttpMethod.GET, null, CapitalDto.class);
 
