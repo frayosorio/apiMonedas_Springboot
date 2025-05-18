@@ -16,7 +16,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 bat 'docker rm -f dockerapimonedas || exit 0'
-                bat 'docker run -d --name dockerapimonedas -p 8080:8080 apimonedas'
+                bat 'docker run -d --name dockerapimonedas -p 8081:8081 apimonedas'
             }
         }
     }
