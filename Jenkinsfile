@@ -1,23 +1,23 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build Maven') {
-      steps {
-        sh 'mvn clean package -DskipTests'
-      }
-    }
-    stage('Docker Build') {
-      steps {
-        dir('presentacion') {
-          sh 'docker build -t apimonedas .'
+    agent any
+    stages {
+        stage('Build Maven') {
+            steps {
+                bat 'mvn clean package -DskipTests'
+            }
         }
-      }
+        stage('Docker Build') {
+            steps {
+                dir('presentacion') {
+                    bat 'docker build -t apimonedas .'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                bat 'docker rm -f dockerapimonedas || exit 0'
+                bat 'docker run -d --name dockerapimonedas -p 8080:8080 apimonedas'
+            }
+        }
     }
-    stage('Deploy') {
-      steps {
-        sh 'docker rm -f dockerapimonedas || true'
-        sh 'docker run -d --name dockerapimonedas -p 8080:8080 apimonedas'
-      }
-    }
-  }
 }
