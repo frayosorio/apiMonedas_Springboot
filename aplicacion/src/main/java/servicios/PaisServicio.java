@@ -4,18 +4,23 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import monedas.api.dominio.entidades.*;
 import monedas.api.dominio.DTOs.*;
 import monedas.api.core.servicios.*;
 import monedas.api.infraestructura.repositorios.*;
+import monedas.api.infraestructura.integracion.*;
 
 @Service
 public class PaisServicio implements IPaisServicio {
 
     @Autowired
     private IPaisRepositorio repositorio;
+
+    @Autowired
+    private PaisCliente integracion;
 
     @Override
     public List<Pais> listar() {
@@ -61,7 +66,7 @@ public class PaisServicio implements IPaisServicio {
 
     @Override
     public CapitalDto obtenerCapital(String nombre) {
-        return null;
+        return integracion.obtenerCapital(nombre);
     }
 
 }
