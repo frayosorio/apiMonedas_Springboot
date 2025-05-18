@@ -12,8 +12,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.config.Customizer;
 
 import monedas.api.aplicacion.seguridad.*;
-import seguridad.FiltroSeguridad;
-import seguridad.UsuarioDetalleServicio;
 
 @Configuration
 @EnableWebSecurity
@@ -32,20 +30,23 @@ public class ConfiguracionSeguridad {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/usuarios/validar/**").permitAll()
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html",
-                                "/swagger-resources/**",
-                                "/webjars/**")
-                        .permitAll()
-                        .anyRequest().authenticated())
+                .csrf(csrf -> csrf.disable()) // Deshabilita la protección CSRF
+                .cors(Customizer.withDefaults()) // Activa CORS
+                .authorizeHttpRequests(
+                        (authz) -> authz
+                                .requestMatchers("/api/usuarios/validar/**").permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui.html",
+                                        "/swagger-resources/**",
+                                        "/webjars/**")
+                                .permitAll()
+                                // .requestMatchers("/api/monedas/**").permitAll()
+                                .anyRequest().authenticated())
                 .addFilterAfter(filtro, UsernamePasswordAuthenticationFilter.class)
                 .build();
+
     }
 
 }
