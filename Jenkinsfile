@@ -13,10 +13,27 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Limpiar contenedor existente') {
             steps {
-                bat 'docker rm -f dockerapimonedas || exit 0'
-                bat 'docker run -d --name dockerapimonedas -p 8081:8081 apimonedas'
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+                        bat """
+                        docker container inspect dockerapimonedas >nul 2>&1 && (
+                            docker container stop dockerapimonedas
+                            docker container rm dockerapimonedas
+                        ) || echo "No existe el contenedor 'dockerapimonedas'."
+                        """
+                    }
+                }
+            }
+        }
+
+
+        stage('Desplegar Contenedor Docker') {
+            steps {
+                script {
+                    bat 'docker container run --network dockerbddivisionpolitica_reddivisionpolitica --name dockerapimonedas -p 8081:8081 -d apimonedas'
+                    }
             }
         }
     }
